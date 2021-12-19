@@ -1,0 +1,31 @@
+dataset:
+  name: mnist
+  root_dir: ./load/mnist
+  batch_size: 32
+  
+system:
+  name: mnist
+  model:
+    name: mlp
+    in_dim: 784
+    out_dim: 10
+    hidden_dims: [512, 512]
+    num_classes: 10
+  
+  loss:
+    lambda_ce: 1.
+  
+  optimizer:
+    name: Adam
+    args:
+      lr: 1.e-4
+      betas: [0.9, 0.999]
+
+trainer:
+  max_epochs: 1000
+  log_every_n_steps: 1
+
+strategy: 'ddp'
+seed: 42
+
+    

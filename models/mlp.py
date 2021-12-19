@@ -2,23 +2,22 @@ import torch.nn as nn
 import models
 
 
-
 @models.register('mlp')
 class MLP(nn.Module):
-
-    def __init__(self, in_dim, out_dim, hidden_list):
+    def __init__(self, config):
         super().__init__()
+        self.in_dim, self.out_dim = config.model.in_dim, config.model.out_dim
+        self.hidden_dims = config.model.hidden_dims
         layers = []
-        lastv = in_dim
-        for hidden in hidden_list:
-            layers.append(nn.Linear(lastv, hidden))
+        lastd = self.in_dim
+        for hidden in self.hidden_dims:
+            layers.append(nn.Linear(lastd, hidden))
             layers.append(nn.ReLU())
-            lastv = hidden
-        layers.append(nn.Linear(lastv, out_dim))
-        self.out_dim = out_dim
+            lastd = hidden
+        layers.append(nn.Linear(lastd, self.out_dim))
         self.layers = nn.Sequential(*layers)
     
     def forward(self, x):
-        shape = x.shape[:-1]
-        x = self.layers(x.view(-1, x.shape[-1]))
-        return x.view(*shape, -1)
+        x = x.view(-1, self.in_dim)
+        x = self.layers(x)
+        return x

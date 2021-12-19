@@ -1,0 +1,5 @@
+pytorch-lightning
+pyyaml
+tqdm
+tensorboard
+addict

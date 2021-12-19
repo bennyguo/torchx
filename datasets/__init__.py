@@ -1,3 +1,19 @@
-from .tools import register, make
+import copy
+
+
+datasets = {}
+
+
+def register(name):
+    def decorator(cls):
+        datasets[name] = cls
+        return cls
+    return decorator
+
+
+def make(name, config):
+    dataset = datasets[name](config)
+    return dataset
+
+
 from . import mnist
-from . import div2k
